@@ -1,0 +1,11 @@
+plaso.tsv.gz: what plaso (the log2timeline/plaso:20260720 Docker image) reads
+from the logs in tests/fixtures/plaso/, with the parsers winpca_dic,
+winpca_db0, text/winiis, text/winfirewall, text/powershell_transcript,
+text/teamviewer_*, text/setupapi and text/sccm (psort -o json_line), one line
+per distinct event: its kind, file, wall-clock time (to the millisecond) and
+the fields compared. Written from plaso's output, not from this crate.
+
+SCCM entries are compared without their times: plaso applies the log's time
+zone bias inconsistently (a +480 entry kept as UTC, a -330 entry shifted the
+other way); this crate reads the bias as Windows defines it, UTC = local time
++ bias, and its unit test checks that.
