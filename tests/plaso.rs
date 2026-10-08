@@ -55,8 +55,8 @@ fn file_lines(name: &str, data: &[u8]) -> Vec<Vec<String>> {
         }
         Kind::SetupApi => setupapi(data),
         Kind::Sccm => sccm(data),
-        Kind::AnyDeskTrace | Kind::AnyDeskConnections => {
-            panic!("{name}: plaso has no AnyDesk logs")
+        Kind::AnyDeskTrace | Kind::AnyDeskConnections | Kind::WerReport => {
+            panic!("{name}: plaso has no AnyDesk logs or error reports")
         }
     };
     rows.into_iter()

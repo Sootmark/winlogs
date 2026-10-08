@@ -11,6 +11,7 @@ proptest! {
         let _ = winlogs::pca::launches(data);
         let _ = winlogs::pca::general(data);
         let _ = winlogs::w3c::read(data);
+        let _ = winlogs::wer::report(data);
         let _ = winlogs::transcript::read(data);
         let _ = winlogs::teamviewer::log(data);
         let _ = winlogs::teamviewer::connections(data, true);

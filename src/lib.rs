@@ -15,6 +15,8 @@
 //! - [`setupapi`]: `setupapi.dev.log` and the like: devices installed (USB
 //!   drives first plugged in), drivers and updates.
 //! - [`sccm`]: Configuration Manager client logs.
+//! - [`wer`]: Windows Error Reporting's reports (`Report.wer`): programs
+//!   that crashed or hung, when, from where, with their loaded modules.
 //!
 //! [`detect`] says which a file is, from its name and first bytes. Damage
 //! goes to `problems`, never a panic.
@@ -26,6 +28,7 @@ pub mod setupapi;
 pub mod teamviewer;
 pub mod transcript;
 pub mod w3c;
+pub mod wer;
 
 use common::time::{days_from_civil, Precision, Ts};
 
@@ -60,6 +63,8 @@ pub enum Kind {
     AnyDeskTrace,
     /// AnyDesk's sessions (`connection_trace.txt`).
     AnyDeskConnections,
+    /// A Windows Error Reporting report (`Report.wer`).
+    WerReport,
 }
 
 /// Which log a file named `name` (a path or a bare name) starting with
@@ -76,6 +81,7 @@ pub fn detect(name: &str, head: &[u8]) -> Option<Kind> {
         "connections.txt" => return Some(Kind::TeamViewerOutgoing),
         "ad.trace" | "ad_svc.trace" => return Some(Kind::AnyDeskTrace),
         "connection_trace.txt" => return Some(Kind::AnyDeskConnections),
+        "report.wer" => return Some(Kind::WerReport),
         _ => {}
     }
     let extension = lower.rsplit_once('.').map_or("", |(_, e)| e);
@@ -95,6 +101,9 @@ pub fn detect(name: &str, head: &[u8]) -> Option<Kind> {
         && first_lines.next().is_some_and(|l| l.contains("PowerShell"))
     {
         return Some(Kind::Transcript);
+    }
+    if wer::is_report(&start) {
+        return Some(Kind::WerReport);
     }
     if start.contains("<![LOG[") {
         return Some(Kind::Sccm);

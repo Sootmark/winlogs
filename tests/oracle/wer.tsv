@@ -1,0 +1,28 @@
+lsass	event_type	APPCRASH
+lsass	time	2023-12-19T09:32:08.8037348Z
+lsass	upload_time	2023-12-19T09:32:10.1234567Z
+lsass	app_path	C:\Windows\system32\lsass.exe
+lsass	signature	Application Name=lsass.exe
+lsass	signature	Application Version=10.0.19041.3086
+lsass	signature	Application Timestamp=a2f1c5e9
+lsass	signature	Fault Module Name=dbghelp.dll
+lsass	signature	Fault Module Version=10.0.19041.3636
+lsass	signature	Fault Module Timestamp=e7d1a2b3
+lsass	signature	Exception Code=c0000005
+lsass	signature	Exception Offset=000000000001a2b4
+lsass	dynamic_signature	OS Version=10.0.19045.2.0.0.256.48
+lsass	dynamic_signature	Locale ID=1033
+lsass	module	C:\Windows\system32\lsass.exe
+lsass	module	C:\Windows\SYSTEM32\ntdll.dll
+lsass	module	C:\Windows\System32\KERNEL32.DLL
+lsass	module	C:\Users\Public\dbghelp.dll
+notepad	event_type	AppHangB1
+notepad	time	2023-12-14T04:00:00.0000000Z
+notepad	app_path	C:\Windows\system32\notepad.exe
+notepad	signature	Application Name=notepad.exe
+notepad	signature	Application Version=10.0.19041.3570
+notepad	signature	Application Timestamp=0d1c3f42
+notepad	signature	Hang Signature=b1c2
+notepad	signature	Hang Type=134217728
+notepad	dynamic_signature	OS Version=10.0.19045.2.0.0.256.48
+notepad	module	C:\Windows\system32\notepad.exe
