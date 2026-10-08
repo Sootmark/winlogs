@@ -69,7 +69,9 @@ pub struct Block {
 }
 
 impl Block {
-    /// The commands typed at a prompt (`PS C:\> whoami` gives `whoami`).
+    /// The commands typed at a prompt (`PS C:\> whoami` gives `whoami`),
+    /// without the `TerminatingError(): …` lines transcription writes after
+    /// a prompt when a pipeline is stopped.
     #[must_use]
     pub fn commands(&self) -> Vec<&str> {
         self.lines
@@ -77,7 +79,8 @@ impl Block {
             .filter_map(|line| {
                 let rest = line.strip_prefix("PS ")?;
                 let (_, command) = rest.split_once("> ")?;
-                Some(command.trim()).filter(|c| !c.is_empty())
+                Some(command.trim())
+                    .filter(|c| !c.is_empty() && !c.starts_with("TerminatingError("))
             })
             .collect()
     }
@@ -209,6 +212,15 @@ mod tests {
         assert_eq!(transcript.get("PSVersion"), Some("5.1.17763.1852"));
         assert_eq!(transcript.blocks.len(), 1);
         assert_eq!(transcript.blocks[0].commands(), ["whoami"]);
+        let stopped = Block {
+            line: 1,
+            time: None,
+            lines: vec![
+                "PS C:\\> ping x".to_owned(),
+                "PS C:\\> TerminatingError(): \"stopped\"".to_owned(),
+            ],
+        };
+        assert_eq!(stopped.commands(), ["ping x"]);
         assert_eq!(
             transcript.end.and_then(|t| t.to_iso8601()).as_deref(),
             Some("2022-07-21T02:37:59.0000000")
