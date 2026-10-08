@@ -1,0 +1,4 @@
+ad_svc.trace and connection_trace.txt were written for these tests, in
+AnyDesk's formats as real lines published in a CTF write-up show them
+(bi0sCTF 2024, "verboten"), with example addresses and made-up IDs. Under
+this crate's licences.

@@ -17,6 +17,8 @@ proptest! {
         let _ = winlogs::teamviewer::connections(data, false);
         let _ = winlogs::setupapi::read(data);
         let _ = winlogs::sccm::read(data);
+        let _ = winlogs::anydesk::trace(data);
+        let _ = winlogs::anydesk::connections(data);
         let _ = winlogs::detect("x.log", data);
     }
 

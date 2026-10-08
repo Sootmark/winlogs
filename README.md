@@ -4,7 +4,7 @@ Windows text logs, for forensics: the plain-text records Windows and common soft
 
 ```toml
 [dependencies]
-sootmark-winlogs = "0.1"
+sootmark-winlogs = "0.2"
 ```
 
 ```rust
@@ -22,6 +22,7 @@ for launch in winlogs::pca::launches(&data).entries {
 - `transcript`: PowerShell transcripts: the header (user, run-as user, machine, host program, process, versions; localised names read by position), the end time, and each block of what was typed and printed with its time and the commands typed at a prompt.
 - `teamviewer`: TeamViewer's application log (multi-line entries joined) and its connection lists, in (`Connections_incoming.txt`: remote ID and name, start, end, local account, kind, session) and out (`Connections.txt`).
 - `setupapi`: SetupAPI's logs (`setupapi.dev.log`, …): each section's title (a USB drive's first install), start, end and exit status.
+- `anydesk`: AnyDesk's traces (`ad.trace`, `ad_svc.trace`: every line with its level, time (UTC), process role, module and message; the remote AnyDesk ID, the remote user's name and the address the lines about sessions give) and `connection_trace.txt` (each session's direction, start, authorisation (`User`, `Passwd`, `Token`, `REJECTED`) and IDs).
 - `sccm`: Configuration Manager client logs: each entry, multi-line text included, with its component, severity, thread and source file; times in UTC from the log's Windows bias (UTC = local time + bias), local without one.
 - Text in UTF-8 or UTF-16 (byte order marks honoured). Local times are kept as local times of unknown zone, never guessed into UTC. Damage goes to `problems`, never a panic.
 
@@ -29,6 +30,7 @@ for launch in winlogs::pca::launches(&data).entries {
 
 - plaso's test logs (Apache-2.0, `tests/fixtures/plaso/`, see `NOTICE`): every one of the 1,356 distinct entries plaso reads from them with its own parsers, read the same (`tests/oracle/`). Beyond plaso, counted in the test: 23 setupapi sections plaso skips, a transcript's last block plaso drops (no separator closes it), an IIS line plaso's grammar rejects, the firewall log's 15 entries (plaso's command line reads none, its own test expects 15), and TeamViewer's repeated lines, which psort keeps once.
 - SCCM times are checked apart: plaso applies the bias inconsistently; here UTC = local time + bias, as Windows defines it.
+- AnyDesk: no open logs exist; the tests read logs written in the formats real lines published in a CTF write-up show (`tests/fixtures/written/`).
 - Property tests: arbitrary text and bytes give entries, problems or nothing, never a panic.
 
 ## Licence

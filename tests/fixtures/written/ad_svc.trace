@@ -1,0 +1,7 @@
+   info 2024-02-16 20:28:59.101       back   4668   6440                   app.backend_session - Logging started.
+   info 2024-02-16 20:29:01.000       back   4668   6440   7 anynet.relay_conn - Logged in from 198.51.100.4:51888 on relay 8a3c1d2e.
+   info 2024-02-16 20:29:03.812       back   4668   6440                   anynet.any_socket - Accept request from 221436813 (unknown).
+   info 2024-02-16 20:29:04.298       back   4668   6440                   app.backend_session - Incoming session request: Richard Beard (221436813)
+   info 2024-02-16 20:29:11.507       back   4668   6440                   app.session - Authenticated with correct passphrase of profile '_unattended_access'.
+   info 2024-02-16 20:31:40.020      front   5120   5200                   app.prepare_task - Preparing files in 'C:\Users\randon\Documents'.
+warning 2024-02-16 20:35:02.711       back   4668   6440                   app.session - Session closed by remote.

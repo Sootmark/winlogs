@@ -19,6 +19,7 @@
 //! [`detect`] says which a file is, from its name and first bytes. Damage
 //! goes to `problems`, never a panic.
 
+pub mod anydesk;
 pub mod pca;
 pub mod sccm;
 pub mod setupapi;
@@ -55,6 +56,10 @@ pub enum Kind {
     SetupApi,
     /// A Configuration Manager (SCCM) client log.
     Sccm,
+    /// AnyDesk's trace (`ad.trace`, `ad_svc.trace`).
+    AnyDeskTrace,
+    /// AnyDesk's sessions (`connection_trace.txt`).
+    AnyDeskConnections,
 }
 
 /// Which log a file named `name` (a path or a bare name) starting with
@@ -69,6 +74,8 @@ pub fn detect(name: &str, head: &[u8]) -> Option<Kind> {
         "pcageneraldb0.txt" | "pcageneraldb1.txt" => return Some(Kind::PcaGeneral),
         "connections_incoming.txt" => return Some(Kind::TeamViewerIncoming),
         "connections.txt" => return Some(Kind::TeamViewerOutgoing),
+        "ad.trace" | "ad_svc.trace" => return Some(Kind::AnyDeskTrace),
+        "connection_trace.txt" => return Some(Kind::AnyDeskConnections),
         _ => {}
     }
     let extension = lower.rsplit_once('.').map_or("", |(_, e)| e);
@@ -94,6 +101,13 @@ pub fn detect(name: &str, head: &[u8]) -> Option<Kind> {
     }
     if start.lines().any(|line| line.starts_with("#Fields:")) {
         return Some(Kind::W3c);
+    }
+    let mut lines = start.lines().filter(|l| !l.trim().is_empty());
+    if lines.next().is_some_and(anydesk::is_trace) {
+        return Some(Kind::AnyDeskTrace);
+    }
+    if start.lines().next().is_some_and(anydesk::is_session) {
+        return Some(Kind::AnyDeskConnections);
     }
     None
 }

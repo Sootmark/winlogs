@@ -1,6 +1,6 @@
 [package]
 name = "sootmark-winlogs"
-version = "0.1.1"
+version = "0.2.0"
 edition = "2021"
 rust-version = "1.80"
 description = "Windows text logs for forensics: Program Compatibility Assistant (execution, Windows 11), IIS and Windows Firewall (W3C), PowerShell transcripts, TeamViewer logs and connections, setupapi (device installs) and SCCM client logs."
