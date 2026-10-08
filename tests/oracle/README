@@ -17,3 +17,6 @@ screenconnect.tsv: the ScreenConnect samples of
 tests/fixtures/written/screenconnect/ read with Python's own sqlite3,
 xml.etree and urllib.parse (gen_screenconnect.py); the deleted events to
 recover are listed by the generator itself (deleted.tsv there).
+
+anydesk.tsv: the DFIR Artifact Museum's AnyDesk logs (tests/fixtures/museum/,
+see its NOTICE) read with Python's own re (gen_anydesk.py), every line.

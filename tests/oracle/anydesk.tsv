@@ -1,0 +1,18 @@
+museum/ad.trace	1	trace	info	2022-09-28T12:39:26.8450000Z	lsvc	9952	9944	anynet.any_socket	Client-ID: 442226597 (FPR: 8e28a2a25b30).	442226597	\N	\N
+museum/ad.trace	2	trace	info	2022-09-28T12:39:26.8450000Z	lsvc	9952	9944	anynet.any_socket	Logged in from 12.xx.xx.21:59562 on relay 80e496c0.	\N	\N	12.xx.xx.21
+museum/ad.trace	3	trace	info	2022-09-28T12:38:44.2220000Z	lsvc	9952	9944	anynet.relay_conn	External address: 34.xx.xx.123:50831.	\N	\N	\N
+museum/ad.trace	4	trace	info	2022-09-28T12:38:44.2220000Z	lsvc	9952	9944	anynet.main_relay_conn	Main relay ID: 80e496c0	\N	\N	\N
+museum/ad.trace	5	trace	info	2022-09-28T12:38:44.2250000Z	lsvc	9952	9944	anynet.main_relay_conn	Detected 2 new networks.	\N	\N	\N
+museum/ad.trace	6	trace	info	2022-09-28T12:38:44.2280000Z	lsvc	9952	9944	anynet.connection_mgr	Main relay connection established.	\N	\N	\N
+museum/ad.trace	7	trace	info	2022-09-28T12:38:44.2280000Z	lsvc	9952	9944	anynet.connection_mgr	New user data. Client-ID: 294433414.	\N	\N	\N
+museum/ad.trace	8	trace	info	2022-09-28T12:41:20.0010000Z	front	6252	496	app.prepare_task	Preparing files in 'C:\Users\lab\Downloads'.	\N	\N	\N
+museum/ad.trace	9	trace	info	2022-09-28T12:41:20.0010000Z	front	6252	496	app.local_file_transfer	Preparation of 1 files completed (io_ok).	\N	\N	\N
+museum/ad_svc.trace	1	trace	info	2022-08-23T10:20:11.9690000Z	gsvc	4628	3528	anynet.relay_conn	External address: 34.xx.xx.123:46798.	\N	\N	\N
+museum/ad_svc.trace	2	trace	info	2022-08-23T10:20:11.9690000Z	gsvc	4628	3528	anynet.main_relay_conn	Main relay ID: 8d9e4ddf	\N	\N	\N
+museum/ad_svc.trace	3	trace	info	2022-08-23T10:20:11.9840000Z	gsvc	4628	3528	fiber.scheduler	Spawning root fiber 18.	\N	\N	\N
+museum/ad_svc.trace	4	trace	info	2022-08-23T10:20:11.9840000Z	gsvc	4628	3528	anynet.connection_mgr	Main relay connection established.	\N	\N	\N
+museum/ad_svc.trace	5	trace	info	2022-08-23T10:20:11.9840000Z	gsvc	4628	3528	anynet.connection_mgr	New user data. Client-ID: 609579424.	\N	\N	\N
+museum/ad_svc.trace	6	trace	info	2022-08-23T10:20:17.1250000Z	gsvc	4628	3528	anynet.any_socket	Client-ID: 547911884 (FPR: 67a8dcc336a1).	547911884	\N	\N
+museum/ad_svc.trace	7	trace	info	2022-08-23T10:20:17.1250000Z	gsvc	4628	3528	anynet.any_socket	Logged in from 12.xx.xx.21:41314 on relay ad3345a7.	\N	\N	12.xx.xx.21
+museum/connection_trace.txt	1	session	Incoming	2022-08-23T10:23:00.0000000Z	Passwd	547911884,547911884
+museum/connection_trace.txt	2	session	Incoming	2022-09-28T12:39:00.0000000Z	User	442226597,442226597

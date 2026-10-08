@@ -7,7 +7,11 @@
 //!   Incoming session request: Richard Beard (221436813)`. Every line is
 //!   kept; the ones naming a remote AnyDesk ID (`Incoming session
 //!   request: <name> (<id>)`, `Accept request from <id>`, `Accepting from
-//!   <id>`) and an address (`Logged in from <ip>:<port>`) give them.
+//!   <id>`, and `anynet.any_socket`'s `Client-ID: <id> (FPR: <fingerprint>)`
+//!   as a peer connects; not `New user data. Client-ID: <id>`, the local
+//!   ID) and an address (`Logged in from <ip>:<port>`) give them.
+//!   The line of asterisks AnyDesk writes before each start's banner is
+//!   skipped.
 //! - `connection_trace.txt`: one line per session, its direction, start
 //!   (`YYYY-MM-DD, HH:MM`, UTC), how it was authorised (`User` accepted by
 //!   the user, `Passwd` with the unattended password, `Token` with a saved
@@ -67,7 +71,7 @@ pub fn trace(data: &[u8]) -> Parsed<TraceLine> {
     let text = decode(data);
     let mut parsed = Parsed::default();
     for (index, line) in text.lines().enumerate() {
-        if line.trim().is_empty() {
+        if line.trim().is_empty() || is_separator(line) {
             continue;
         }
         match trace_line(line) {
@@ -131,6 +135,12 @@ fn remote(message: &str) -> (Option<String>, Option<String>) {
         {
             return (Some(name.to_owned()), id_of(id));
         }
+    }
+    if let Some((id, _)) = message
+        .strip_prefix("Client-ID: ")
+        .and_then(|rest| rest.split_once(" (FPR: "))
+    {
+        return (None, id_of(id));
     }
     for marker in ["Accept request from ", "Accepting from "] {
         if let Some(rest) = message.split_once(marker).map(|(_, r)| r) {
@@ -205,6 +215,13 @@ fn session(line: &str) -> Option<Session> {
     })
 }
 
+/// Whether a line is the row of asterisks before a start's banner
+/// (`* * * * *`).
+pub(crate) fn is_separator(line: &str) -> bool {
+    let line = line.trim();
+    line.starts_with('*') && line.chars().all(|c| c == '*' || c == ' ')
+}
+
 /// Whether a line looks like a trace line.
 pub(crate) fn is_trace(line: &str) -> bool {
     trace_line(line).is_some()
@@ -233,7 +250,15 @@ mod tests {
         let login = trace_line("   info 2024-02-16 20:29:01.000       back   4668   6440   7 anynet.relay_conn - Logged in from 198.51.100.4:51888 on relay 8a3c1d2e.").unwrap();
         assert_eq!(login.address.as_deref(), Some("198.51.100.4"));
         assert_eq!(login.module, "anynet.relay_conn");
+        let peer = trace_line("info 2022-09-28 12:39:26.845       lsvc   9952   9944   21                anynet.any_socket - Client-ID: 442226597 (FPR: 8e28a2a25b30).").unwrap();
+        assert_eq!(peer.remote_id.as_deref(), Some("442226597"));
+        let local = trace_line("info 2022-09-28 12:38:44.228       lsvc   9952   9944    2            anynet.connection_mgr - New user data. Client-ID: 294433414.").unwrap();
+        assert_eq!(local.remote_id, None);
         assert!(trace_line("hello - world").is_none());
+        assert!(is_separator(" * * * * * * * * *"));
+        assert!(!is_separator(
+            "   info 2024-02-16 20:28:59.101  main - * Version 8.0.10"
+        ));
     }
 
     #[test]

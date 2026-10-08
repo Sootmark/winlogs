@@ -1,0 +1,11 @@
+These files are from the DFIR Artifact Museum, under the MIT License
+(LICENSE, in this directory). Copyright (c) 2022 DFIR Artifact Museum.
+
+Source: https://github.com/AndrewRathbun/DFIRArtifactMuseum, Windows/AnyDesk/,
+at commit fdcb1fab0c7b00e89129668d9c30174dd4ea3e5b. AnyDesk's own logs,
+with their public addresses partly masked (12.xx.xx.21) by the museum;
+unmodified. SHA-256:
+
+  ad.trace              a33d99d7d3f27386e501da5e16e5ce5aa47be6f11978039488432b8435d469a4
+  ad_svc.trace          d110289f73cd35995458693669ac5cc166a8bae3e8acf5f3cbb873cd2864fdbf
+  connection_trace.txt  f2a839685304a2e843909a331f77b41df271a95ab8a84e3a266abab96e27c3f8

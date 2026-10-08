@@ -129,7 +129,9 @@ pub fn detect(name: &str, head: &[u8]) -> Option<Kind> {
     if start.lines().any(|line| line.starts_with("#Fields:")) {
         return Some(Kind::W3c);
     }
-    let mut lines = start.lines().filter(|l| !l.trim().is_empty());
+    let mut lines = start
+        .lines()
+        .filter(|l| !l.trim().is_empty() && !anydesk::is_separator(l));
     if lines.next().is_some_and(anydesk::is_trace) {
         return Some(Kind::AnyDeskTrace);
     }
