@@ -1,10 +1,10 @@
 # winlogs
 
-Windows text logs, for forensics: the plain-text records Windows and common software keep beside the event logs, each read into entries with their time and fields. One dependency, its sibling `sootmark-common` (times).
+Windows text logs, for forensics: the plain-text records Windows and common software keep beside the event logs, each read into entries with their time and fields; and the settings and session database of ConnectWise ScreenConnect. Two dependencies, its siblings `sootmark-common` (times) and `sootmark-sqlite` (ScreenConnect's `Session.db`).
 
 ```toml
 [dependencies]
-sootmark-winlogs = "0.3"
+sootmark-winlogs = "0.4"
 ```
 
 ```rust
@@ -25,6 +25,10 @@ for launch in winlogs::pca::launches(&data).entries {
 - `anydesk`: AnyDesk's traces (`ad.trace`, `ad_svc.trace`: every line with its level, time (UTC), process role, module and message; the remote AnyDesk ID, the remote user's name and the address the lines about sessions give) and `connection_trace.txt` (each session's direction, start, authorisation (`User`, `Passwd`, `Token`, `REJECTED`) and IDs).
 - `sccm`: Configuration Manager client logs: each entry, multi-line text included, with its component, severity, thread and source file; times in UTC from the log's Windows bias (UTC = local time + bias), local without one.
 - `wer`: Windows Error Reporting's reports (`Report.wer`, `WER\ReportArchive` and `ReportQueue`, the system's and each user's): the event type (`APPCRASH`, `BEX64`, `AppHangB1`, …), when it happened and was reported (UTC), the program's name and path, the signature (application, version, faulting module, exception code, offset), the dynamic signature, the modules loaded, and every value. Evidence of execution, and of tools that crashed doing their work.
+- `screenconnect`: ConnectWise ScreenConnect (formerly ConnectWise Control), remote access often abused:
+  - `config`: the client's `system.config` (`Program Files (x86)\ScreenConnect Client (<thumbprint>)`) and `user.config` (a user's `AppData\Local\ScreenConnect Client (<thumbprint>)`): every .NET setting (section, name, value), and the launch parameters they hold: session type (`e`), process type (`y`), relay host (`h`) and port (`p`), session id (`s`), key (`k`), custom properties (`c`) and every other parameter, form-decoded. `launch_parameters` reads the same from the client service's `ImagePath`;
+  - `sessions`: the server's `App_Data\Session.db` (SQLite, with its `-wal`): sessions (id, name, type, host, custom properties), connections (session, participant, process type host or guest, network address, client type and version, connected and disconnected times) and events of sessions and connections (time, type, host, data: commands queued and their output, files transferred, messages), and events deleted (a maintenance purge, a cleanup by hand) recovered from free space with `sootmark-sqlite`. Event types 44 and 70 are named `QueuedCommand` and `RanCommand`, the meaning ImmyBot's integration guide gives them; other numbers are kept as numbers.
+  - ScreenConnect's own `*.log` files (server and toolbox) have no documented format and aren't read; its Application event log entries are read with the event logs.
 - Text in UTF-8 or UTF-16 (byte order marks honoured). Local times are kept as local times of unknown zone, never guessed into UTC. Damage goes to `problems`, never a panic.
 
 ## How it's checked
@@ -33,7 +37,8 @@ for launch in winlogs::pca::launches(&data).entries {
 - SCCM times are checked apart: plaso applies the bias inconsistently; here UTC = local time + bias, as Windows defines it.
 - AnyDesk: no open logs exist; the tests read logs written in the formats real lines published in a CTF write-up show (`tests/fixtures/written/`).
 - Windows Error Reporting: no open reports exist; reports written as Windows writes them (`tests/fixtures/written/wer/`), every value compared with what Python's own codecs read (`tests/oracle/gen_wer.py`, `wer.tsv`).
-- Property tests: arbitrary text and bytes give entries, problems or nothing, never a panic.
+- ScreenConnect: no open samples exist, and ConnectWise doesn't document `Session.db`. The files in `tests/fixtures/written/screenconnect/` are written by `make.py` (the settings layout public scripts read from real clients; the database's tables and columns as ScreenConnect's reports name them, with assumed column types, some values in the other type SQLite allows): every value read as Python's own sqlite3, xml.etree and urllib.parse read it (`tests/oracle/gen_screenconnect.py`, `screenconnect.tsv`: 72 values), and 241 of the 242 events a purge and two deletions removed recovered (the last lost its first bytes to a freeblock header). **Unverified**: the column types, time format and time zone (UTC assumed) of a real `Session.db`, the numbers of event and process types other than 44 and 70, and the names of the settings, until an openly licensed sample is found.
+- Property tests: arbitrary text and bytes, markup, and the session database damaged or cut give entries, problems or nothing, never a panic.
 
 ## Licence
 

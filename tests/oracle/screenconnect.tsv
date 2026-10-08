@@ -1,0 +1,72 @@
+config	system.config	ScreenConnect.ApplicationSettings	ClientLaunchParametersConstraint	?h=relay.example.net&p=8041&k=BgIAAACkAABSU0ExAAgAAAEAAQCx%2bS9qL0mR%2fWz%3d
+launch	system.config	h	relay.example.net
+launch	system.config	p	8041
+launch	system.config	k	BgIAAACkAABSU0ExAAgAAAEAAQCx+S9qL0mR/Wz=
+config	user.config	ScreenConnect.UserInterfaceSettings	LastFileTransferDirectory	C:\\Users\\alice\\Documents\\Payroll & HR
+config	user.config	ScreenConnect.UserInterfaceSettings	LaunchParameters	?e=Access&y=Guest&h=relay.example.net&p=8041&s=6f1b3c3e-2a4d-4c5e-9f00-1a2b3c4d5e6f&k=BgIAAACk&c=Example+Co&c=&c=Finance%20laptop
+config	user.config	ScreenConnect.UserInterfaceSettings	RecentFolders	xml:ArrayOfString
+launch	user.config	e	Access
+launch	user.config	y	Guest
+launch	user.config	h	relay.example.net
+launch	user.config	p	8041
+launch	user.config	s	6f1b3c3e-2a4d-4c5e-9f00-1a2b3c4d5e6f
+launch	user.config	k	BgIAAACk
+launch	user.config	c	Example Co
+launch	user.config	c	
+launch	user.config	c	Finance laptop
+session	1	SessionID	6f1b3c3e-2a4d-4c5e-9f00-1a2b3c4d5e6f
+session	1	Name	FIN-LAPTOP-07
+session	1	SessionType	Access
+session	1	Host	tech1
+session	1	CustomProperty1	Example Co
+session	1	CustomProperty4	Workstation
+session	2	SessionID	0a0b0c0d-1111-4222-8333-444455556666
+session	2	Name	Untitled Session
+session	2	SessionType	Support
+session	2	Host	tech2
+connection	1	SessionID	6f1b3c3e-2a4d-4c5e-9f00-1a2b3c4d5e6f
+connection	1	ConnectionID	11111111-2222-4333-8444-555555555555
+connection	1	ProcessType	Host
+connection	1	ParticipantName	tech1
+connection	1	NetworkAddress	203.0.113.50
+connection	1	ClientType	DotNetWinForms
+connection	1	ClientVersion	23.9.8.8811
+connection	1	ConnectedTime	2024-02-21T02:13:44.1234567Z
+connection	1	DisconnectedTime	2024-02-21T02:41:09.5000000Z
+connection	2	SessionID	6f1b3c3e-2a4d-4c5e-9f00-1a2b3c4d5e6f
+connection	2	ConnectionID	22222222-3333-4444-8555-666666666666
+connection	2	ProcessType	1
+connection	2	ParticipantName	FIN-LAPTOP-07
+connection	2	NetworkAddress	198.51.100.23
+connection	2	ClientType	DotNetWinForms
+connection	2	ClientVersion	23.9.8.8811
+connection	2	ConnectedTime	2024-02-21T02:13:40.0000000Z
+event	SessionEvent	1	SessionID	6f1b3c3e-2a4d-4c5e-9f00-1a2b3c4d5e6f
+event	SessionEvent	1	EventID	aaaaaaaa-0000-4000-8000-000000000001
+event	SessionEvent	1	Time	2024-02-21T02:14:02.0000001Z
+event	SessionEvent	1	EventType	44
+event	SessionEvent	1	Host	tech1
+event	SessionEvent	1	Data	#!ps\nwhoami /all
+event	SessionEvent	3	SessionID	6f1b3c3e-2a4d-4c5e-9f00-1a2b3c4d5e6f
+event	SessionEvent	3	ConnectionID	11111111-2222-4333-8444-555555555555
+event	SessionEvent	3	EventID	aaaaaaaa-0000-4000-8000-000000000003
+event	SessionEvent	3	Time	2024-02-21T02:16:00.0000000Z
+event	SessionEvent	3	EventType	2
+event	SessionEvent	3	Host	tech1
+event	SessionEvent	4	SessionID	0a0b0c0d-1111-4222-8333-444455556666
+event	SessionEvent	4	EventID	aaaaaaaa-0000-4000-8000-000000000004
+event	SessionEvent	4	Time	2024-02-21T03:00:00.5000000Z
+event	SessionEvent	4	EventType	CreatedSession
+event	SessionEvent	4	Host	tech2
+event	SessionConnectionEvent	1	SessionID	6f1b3c3e-2a4d-4c5e-9f00-1a2b3c4d5e6f
+event	SessionConnectionEvent	1	ConnectionID	22222222-3333-4444-8555-666666666666
+event	SessionConnectionEvent	1	EventID	aaaaaaaa-0000-4000-8000-000000000011
+event	SessionConnectionEvent	1	Time	2024-02-21T02:14:05.2500000Z
+event	SessionConnectionEvent	1	EventType	70
+event	SessionConnectionEvent	1	Data	fin-laptop-07\\alice
+event	SessionConnectionEvent	3	SessionID	6f1b3c3e-2a4d-4c5e-9f00-1a2b3c4d5e6f
+event	SessionConnectionEvent	3	ConnectionID	11111111-2222-4333-8444-555555555555
+event	SessionConnectionEvent	3	EventID	aaaaaaaa-0000-4000-8000-000000000013
+event	SessionConnectionEvent	3	Time	2024-02-21T02:20:31.7500000Z
+event	SessionConnectionEvent	3	EventType	27
+event	SessionConnectionEvent	3	Data	mimikatz.zip

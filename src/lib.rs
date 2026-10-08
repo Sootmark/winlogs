@@ -17,6 +17,11 @@
 //! - [`sccm`]: Configuration Manager client logs.
 //! - [`wer`]: Windows Error Reporting's reports (`Report.wer`): programs
 //!   that crashed or hung, when, from where, with their loaded modules.
+//! - [`anydesk`]: AnyDesk's traces and `connection_trace.txt`.
+//! - [`screenconnect`]: ConnectWise ScreenConnect's client settings
+//!   (`system.config`, `user.config`: the relay and session it connects
+//!   to) and its server's session database (`Session.db`: sessions,
+//!   connections, commands and transfers).
 //!
 //! [`detect`] says which a file is, from its name and first bytes. Damage
 //! goes to `problems`, never a panic.
@@ -24,6 +29,7 @@
 pub mod anydesk;
 pub mod pca;
 pub mod sccm;
+pub mod screenconnect;
 pub mod setupapi;
 pub mod teamviewer;
 pub mod transcript;
@@ -37,6 +43,8 @@ pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 /// Ticks (100 ns) in a millisecond.
 const TICKS_PER_MS: i64 = 10_000;
+/// The first bytes of a SQLite database.
+const SQLITE_HEADER: &[u8] = b"SQLite format 3\0";
 
 /// Which log a file is.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -65,6 +73,10 @@ pub enum Kind {
     AnyDeskConnections,
     /// A Windows Error Reporting report (`Report.wer`).
     WerReport,
+    /// A ScreenConnect client's settings (`system.config`, `user.config`).
+    ScreenConnectConfig,
+    /// A ScreenConnect server's session database (`Session.db`).
+    ScreenConnectSessions,
 }
 
 /// Which log a file named `name` (a path or a bare name) starting with
@@ -82,6 +94,12 @@ pub fn detect(name: &str, head: &[u8]) -> Option<Kind> {
         "ad.trace" | "ad_svc.trace" => return Some(Kind::AnyDeskTrace),
         "connection_trace.txt" => return Some(Kind::AnyDeskConnections),
         "report.wer" => return Some(Kind::WerReport),
+        "session.db" if head.starts_with(SQLITE_HEADER) => {
+            return Some(Kind::ScreenConnectSessions)
+        }
+        "system.config" | "user.config" if start.contains("<ScreenConnect.") => {
+            return Some(Kind::ScreenConnectConfig)
+        }
         _ => {}
     }
     let extension = lower.rsplit_once('.').map_or("", |(_, e)| e);
@@ -290,6 +308,22 @@ mod tests {
             Some(Kind::Sccm)
         );
         assert_eq!(detect("notes.txt", b"hello"), None);
+        assert_eq!(
+            detect(
+                r"C:\Program Files (x86)\ScreenConnect\App_Data\Session.db",
+                b"SQLite format 3\0"
+            ),
+            Some(Kind::ScreenConnectSessions)
+        );
+        assert_eq!(detect("Session.db", b"not sqlite"), None);
+        assert_eq!(
+            detect(
+                "system.config",
+                b"<configuration><ScreenConnect.ApplicationSettings>"
+            ),
+            Some(Kind::ScreenConnectConfig)
+        );
+        assert_eq!(detect("user.config", b"<configuration/>"), None);
         let transcript = "**********************\r\nStart der Windows PowerShell-Aufzeichnung\r\n";
         assert_eq!(
             detect("x.txt", transcript.as_bytes()),

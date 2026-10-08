@@ -9,3 +9,11 @@ SCCM entries are compared without their times: plaso applies the log's time
 zone bias inconsistently (a +480 entry kept as UTC, a -330 entry shifted the
 other way); this crate reads the bias as Windows defines it, UTC = local time
 + bias, and its unit test checks that.
+
+wer.tsv: the reports of tests/fixtures/written/wer/ read with Python's own
+codecs (gen_wer.py).
+
+screenconnect.tsv: the ScreenConnect samples of
+tests/fixtures/written/screenconnect/ read with Python's own sqlite3,
+xml.etree and urllib.parse (gen_screenconnect.py); the deleted events to
+recover are listed by the generator itself (deleted.tsv there).
